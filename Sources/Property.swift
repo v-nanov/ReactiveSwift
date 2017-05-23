@@ -527,7 +527,9 @@ public final class Property<Value>: PropertyProtocol {
 		unsafeProducer.startWithSignal { upstream, interruptHandle in
 			// A composed property tracks its active consumers through its relay signal, and
 			// interrupts `unsafeProducer` if the relay signal terminates.
-			let (signal, _observer) = Signal<Value, NoError>.pipe(disposable: interruptHandle)
+			let (signal, _observer, lifetime) = Signal<Value, NoError>.pipe()
+			lifetime.observeEnded(interruptHandle.dispose)
+
 			let observer = transform?(_observer) ?? _observer
 			relay = signal
 

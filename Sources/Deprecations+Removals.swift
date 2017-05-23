@@ -3,6 +3,14 @@ import Dispatch
 import Result
 
 // MARK: Unavailable methods in ReactiveSwift 2.0.
+extension Signal {
+	@available(*, unavailable, message:"Use the `Signal.init` that accepts a two-argument generator.")
+	public convenience init(_ generator: (Observer) -> Disposable?) { fatalError() }
+
+	@available(*, unavailable, message:"Use the `Signal.pipe` variant that returns a `Lifetime` instead.")
+	public static func pipe(disposable: Disposable?) -> (output: Signal, input: Observer) { fatalError() }
+}
+
 extension Lifetime {
 	@available(*, unavailable, renamed:"hasEnded")
 	public var isDisposed: Bool { fatalError() }

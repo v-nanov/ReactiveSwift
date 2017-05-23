@@ -185,11 +185,7 @@ public struct SignalProducer<Value, Error: Swift.Error> {
 	///            `Signal` commences. Both the produced `Signal` and an interrupt handle
 	///            of the signal would be passed to the closure.
 	public func startWithSignal(_ setup: (_ signal: Signal<Value, Error>, _ interruptHandle: Disposable) -> Void) {
-		// Disposes of the work associated with the SignalProducer and any
-		// upstream producers.
-		let producerDisposable = CompositeDisposable()
-
-		let (signal, observer) = Signal<Value, Error>.pipe(disposable: producerDisposable)
+		let (signal, observer, lifetime) = Signal<Value, Error>.pipe()
 
 		// Directly disposed of when `start()` or `startWithSignal()` is
 		// disposed.
@@ -201,7 +197,7 @@ public struct SignalProducer<Value, Error: Swift.Error> {
 			return
 		}
 
-		startHandler(observer, Lifetime(producerDisposable))
+		startHandler(observer, lifetime)
 	}
 }
 
