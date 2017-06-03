@@ -1,5 +1,11 @@
 import Result
 
+extension Result: SignalProducerConvertible {
+	public var producer: SignalProducer<T, Error> {
+		return SignalProducer(result: self)
+	}
+}
+
 /// Private alias of the free `materialize()` from `Result`.
 ///
 /// This exists because within a `Signal` or `SignalProducer` operator,
